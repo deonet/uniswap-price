@@ -1,5 +1,5 @@
 {
-    "name": "uniswap-price",
+    "name": "uniswap-price2",
     "version": "1.0.4",
     "description": "get token price from uniswap",
     "main": "index.js",
@@ -26,6 +26,8 @@
         "@ethersproject/networks": "^5.0.3",
         "@ethersproject/providers": "^5.0.8",
         "@ethersproject/solidity": "^5.0.4",
-        "@uniswap/sdk": "^3.0.3"
+        "@uniswap/sdk": "^3.0.3",
+        "lowdb": "^1.0.0",
+        "uniswap-price": "^1.0.4"
     }
 }
