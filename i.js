@@ -5,7 +5,7 @@ const dbjson=
 const adapter = new FileSync(dbjson)	
 const db = low(adapter)
 
-let sleep2 = 1*60
+let sleep2 = 2*60 ;
 
 
 
@@ -180,7 +180,8 @@ const {
 	 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 = WETH
 	 0x6B175474E89094C44Da98b954EedeAC495271d0F = DAI
 	 */
-	 let dai = array[1]
+     let dai = array[1];
+     let token = array[2]; 
 	 
      let data
 	 	 
@@ -193,7 +194,9 @@ const {
         
         if (data) {
             await updateToken([ dai , data , 
-                'MidPrice' ]  )
+                'MidPrice' ,
+                token
+            ]  )
         }
 
 		 data = await getExecutionPrice("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", 18, 
@@ -205,7 +208,15 @@ const {
 			dai , 18
 			 , 1 , array[0]
 		 )
-		 console.log('MidPriceViaETH',data)
+         console.log('MidPriceViaETH',data);
+         if (data) {
+            await updateToken([ dai , data , 
+                'MidPriceViaETH' ,
+                token 
+            ]  )
+        }
+ 
+         
 
 		 data = await getExecutionPriceViaETH("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 6, 
 			dai , 18, "1000000000"
@@ -231,27 +242,41 @@ function scaryClown() {
 
 async function msg() {
 
-    db.read()
+    db.read();
+
+    let cek = 20 ;
 
    let tokenCount = await db.get('tokens')
   .size()
   .value();
   console.log('token count:', tokenCount);
   
-for (let index = 0; index < 5; index++) {
+for (let index = 0; index < cek; index++) {
 	//const element = array[index];
 	
 	let token = await db.get('tokens['+ ((tokenCount-1)-index) +']')
 	.value();
-	console.log('token:', token.title);
+	console.log('\r\n\r'+'Token ['+ (cek-index) +']:', token.title);
 
-	let a = await main(['c6807416c10d4086977491f564e48de3' , token.addressUniq ])
+	let a = await main([
+        'c6807416c10d4086977491f564e48de3' , 
+        token.addressUniq , 
+        token , 
+    ]);
 	
 }  
+/**
+let token = await db.get('tokens')
+.find({ addressUniq : '0x6B175474E89094C44Da98b954EedeAC495271d0F' })
+.value();
+console.log('token DAI');
+let a = await main(['c6807416c10d4086977491f564e48de3' , token.addressUniq ]);
+ */
 
-  const msg2 = await scaryClown();
-  console.log('Message:', msg2);
+
+  console.log('SLEEP (seconds) ',sleep2);
   console.log(' \r\n\r ');
+  const msg2 = await scaryClown();
   
   msg()
 }
@@ -259,6 +284,7 @@ msg(); // Message: 🤡 <-- after 2 seconds
 
 async function updateToken(params) {
     let newData = []
+    let token = params[3]; // Array
 
     let object = params[1]
     for (const key in object) {
@@ -266,8 +292,15 @@ async function updateToken(params) {
             const element = object[key];
             
             let key2 = params[2] + "_" + (key.toString())
-            newData[key2] = element
-            console.log( key2 )
+
+            let firstValue = '' + key2 + '0' ;
+
+            //console.log( 'token 0', token[firstValue] );
+            if (!token[firstValue]) {
+                newData[firstValue] = element ;
+            }            
+            newData[key2 + '1' ] = element ;
+
             //newData[ key ] = element
 
         }
