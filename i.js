@@ -1,13 +1,12 @@
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
-const dbjson=
-'C:/g/skim/public/db2.json';
+const dbjsonRaedOnly='C:/Users/gold1tb/Documents/GitHub/a02/uniswap-skim-a01/public/db2.json';
+const dbjson='C:/Users/gold1tb/Documents/GitHub/a02/uniswap-skim-a01/public/db2price.json';
+//const dbjson_='./db2price.json';
 const adapter = new FileSync(dbjson)	
 const db = low(adapter)
 
-let sleep2 = 2*60 ;
-
-
+let sleep2 = 1*60 ;
 
 const {
      ChainId,
@@ -174,6 +173,8 @@ const {
 
 
  const main = async ( array ) => {
+
+    console.log('main', array )
 	 
 	 /**
 	 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 = USDC
@@ -232,19 +233,19 @@ const {
  
 // main(['c6807416c10d4086977491f564e48de3',''])
  
-function scaryClown() {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve('🤡');
-    }, (sleep2 )*1000);
-  });
-}
+function scaryClown(){
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve('🤡');
+      }, (sleep2 )*1000);
+    });
+}  
 
 async function msg() {
 
     db.read();
 
-    let cek = 20 ;
+    let cek = 2 ;
 
    let tokenCount = await db.get('tokens')
   .size()
@@ -274,10 +275,35 @@ let a = await main(['c6807416c10d4086977491f564e48de3' , token.addressUniq ]);
  */
 
 
+console.log('\r\n' + 'cek new');
+let adapter2 = new FileSync( dbjsonRaedOnly )	
+let db2 = low(adapter2);
+db2.read(); let cek2 = 3;
+let tokenCount2 = await db2.get('tokens')
+.size()
+.value();
+console.log('token count 2:', tokenCount2);
+for (let j = 0; j < cek2; j++) {
+    const element = 'tokens['+ ((tokenCount2-1)-j) +']' ;
+    let token = await db2.get( element ).value();
+    console.log('\r\n\r'+'Token ['+ (cek2-j) +']:', token.title);
+    
+    let insert1 = await main([
+        'c6807416c10d4086977491f564e48de3' , 
+        token.addressUniq , 
+        token , 
+    ]);    
+
+}
+
+
+
   console.log('SLEEP (seconds) ',sleep2);
   console.log(' \r\n\r ');
   const msg2 = await scaryClown();
   
+
+
   msg()
 }
 msg(); // Message: 🤡 <-- after 2 seconds
@@ -285,6 +311,9 @@ msg(); // Message: 🤡 <-- after 2 seconds
 async function updateToken(params) {
     let newData = []
     let token = params[3]; // Array
+    let addressUniq = params[0]
+
+    console.log('addressUniq',addressUniq)
 
     let object = params[1]
     for (const key in object) {
@@ -303,15 +332,33 @@ async function updateToken(params) {
 
             //newData[ key ] = element
 
+        }else{
+            console.log( "NOT object.hasOwnProperty(key) " )            
         }
     }
 
     console.log('newData',newData) 
 
+    const retVal = await db.get('tokens')
+    .find({ addressUniq: params[0] })
+    .value();
+    if (retVal) {
+        console.log('Exist YES? ', retVal )         
+    } else {
+        console.log('Exist NO? ', token );
+        let newT = {
+            addressUniq: addressUniq 
+        }
+        db.get('tokens')
+        .push( token )
+        .write()
+
+    }
+    
     db.get('tokens')
-  .find({ addressUniq: params[0] })
-  .assign( newData )
-  .write();
+    .find({ addressUniq: params[0] })
+    .assign( newData )
+    .write();
     
 }
 
