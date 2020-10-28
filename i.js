@@ -245,7 +245,7 @@ async function msg() {
 
     db.read();
 
-    let cek = 2 ;
+    let cek = 30 ; // update price
 
    let tokenCount = await db.get('tokens')
   .size()
@@ -278,7 +278,7 @@ let a = await main(['c6807416c10d4086977491f564e48de3' , token.addressUniq ]);
 console.log('\r\n' + 'cek new');
 let adapter2 = new FileSync( dbjsonRaedOnly )	
 let db2 = low(adapter2);
-db2.read(); let cek2 = 3;
+db2.read(); let cek2 = 10; // new ?
 let tokenCount2 = await db2.get('tokens')
 .size()
 .value();
@@ -308,6 +308,24 @@ for (let j = 0; j < cek2; j++) {
 }
 msg(); // Message: 🤡 <-- after 2 seconds
 
+
+function getDateTime(jamOnly='y') {
+	var date = new Date();	
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+    var sec  = date.getSeconds();
+	sec = (sec < 10 ? "0" : "") + sec;
+	if(jamOnly=='h' )return "" + hour + ":" + min + ":" + sec;	
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+    return year + ":" + month + ":" + day + " " + hour + ":" + min + ":" + sec;
+}
+
 async function updateToken(params) {
     let newData = []
     let token = params[3]; // Array
@@ -336,6 +354,7 @@ async function updateToken(params) {
             console.log( "NOT object.hasOwnProperty(key) " )            
         }
     }
+    newData['updateDt']= getDateTime('h')
 
     console.log('newData',newData) 
 
