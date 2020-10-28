@@ -51,3 +51,11 @@ data = await uniswapPrice.getMidPriceViaETH("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3
  }
 ```
 
+## run
+
+node i
+
+if error then
+npm install lowdb
+
+
