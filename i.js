@@ -216,9 +216,7 @@ const {
                 token 
             ]  )
         }
- 
-         
-
+		
 		 data = await getExecutionPriceViaETH("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 6, 
 			dai , 18, "1000000000"
 			 , 1 , array[0]
@@ -257,7 +255,7 @@ for (let index = 0; index < cek; index++) {
 	
 	let token = await db.get('tokens['+ ((tokenCount-1)-index) +']')
 	.value();
-	console.log('\r\n\r'+'Token ['+ (cek-index) +']:', token.title);
+	console.log('\r\n\r'+'(update) Token ['+ (cek-index) +']:', token.title);
 
 	let a = await main([
         'c6807416c10d4086977491f564e48de3' , 
@@ -286,7 +284,7 @@ console.log('token count 2:', tokenCount2);
 for (let j = 0; j < cek2; j++) {
     const element = 'tokens['+ ((tokenCount2-1)-j) +']' ;
     let token = await db2.get( element ).value();
-    //console.log('\r\n\r'+'Token ['+ (cek2-j) +']:', token.title);
+    console.log('\r\n\r'+'(insert) Token ['+ (cek2-j) +']:', token.title);
     
     let insert1 = await main([
         'c6807416c10d4086977491f564e48de3' , 
@@ -362,9 +360,9 @@ async function updateToken(params) {
     .find({ addressUniq: params[0] })
     .value();
     if (retVal) {
-        //console.log('Exist YES? ' )         
+        console.log('\r\n' + 'UPDATE' , retVal.title )         
     } else {
-        //console.log('Exist NO? ', token );
+        console.log('\r\n' + 'NEW Token INSERT ===>' , token.title );
         db.get('tokens')
         .push( token )
         .write()
