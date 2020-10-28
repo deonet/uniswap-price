@@ -174,7 +174,7 @@ const {
 
  const main = async ( array ) => {
 
-    console.log('main', array )
+    //console.log('main', array )
 	 
 	 /**
 	 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 = USDC
@@ -286,7 +286,7 @@ console.log('token count 2:', tokenCount2);
 for (let j = 0; j < cek2; j++) {
     const element = 'tokens['+ ((tokenCount2-1)-j) +']' ;
     let token = await db2.get( element ).value();
-    console.log('\r\n\r'+'Token ['+ (cek2-j) +']:', token.title);
+    //console.log('\r\n\r'+'Token ['+ (cek2-j) +']:', token.title);
     
     let insert1 = await main([
         'c6807416c10d4086977491f564e48de3' , 
@@ -331,7 +331,7 @@ async function updateToken(params) {
     let token = params[3]; // Array
     let addressUniq = params[0]
 
-    console.log('addressUniq',addressUniq)
+    //console.log('addressUniq',addressUniq)
 
     let object = params[1]
     for (const key in object) {
@@ -356,18 +356,15 @@ async function updateToken(params) {
     }
     newData['updateDt']= getDateTime('h')
 
-    console.log('newData',newData) 
+    //console.log('newData',newData) 
 
     const retVal = await db.get('tokens')
     .find({ addressUniq: params[0] })
     .value();
     if (retVal) {
-        console.log('Exist YES? ', retVal )         
+        //console.log('Exist YES? ' )         
     } else {
-        console.log('Exist NO? ', token );
-        let newT = {
-            addressUniq: addressUniq 
-        }
+        //console.log('Exist NO? ', token );
         db.get('tokens')
         .push( token )
         .write()
